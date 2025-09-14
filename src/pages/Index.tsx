@@ -47,7 +47,7 @@ const Index = () => {
     }, 100);
   };
 
-  const streamUrl = "https://lb3.strmd.top/secure/kupVaYWkLqDmAipVUvFPPOOBOZkYPSiS/echo/stream/england-vs-south-africa-third-t20-cricket-1/1/playlist.m3u8";
+  const streamUrl = "https://dai.google.com/linear/hls/event/eerPuh7PQM-0T7qEJ9TwHQ/master.m3u8";
 
   return (
     <div className="min-h-screen bg-background">
@@ -72,9 +72,9 @@ const Index = () => {
         </div>
 
         {/* Main Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="max-w-4xl mx-auto">
           {/* Video Player Section */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="space-y-6">
             {isWatching ? (
               <div className="space-y-4">
                 <VideoPlayer
@@ -99,57 +99,25 @@ const Index = () => {
               <MatchCard
                 {...featuredMatch}
                 onPlay={handleWatchLive}
-                className="lg:col-span-1"
               />
             )}
-
           </div>
 
-          {/* Sidebar */}
-          <div className="space-y-6">
-            {/* Quick Actions */}
-            <Card className="p-6">
-              <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
-                <Star className="h-5 w-5 text-primary" />
-                Featured Match
-              </h3>
+          {/* Telegram Join Section */}
+          <div className="mt-8 text-center">
+            <Card className="p-6 bg-gradient-to-r from-primary/10 to-primary/5 border-primary/20">
               <div className="space-y-4">
-                <div className="p-3 rounded-lg bg-muted/50 border border-border/50">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium">England</span>
-                    <span className="text-sm font-bold">180/5</span>
-                  </div>
-                  <div className="text-xs text-muted-foreground">18.3 overs</div>
-                </div>
-                <div className="p-3 rounded-lg bg-muted/50 border border-border/50">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium">South Africa</span>
-                    <span className="text-sm font-bold">165/8</span>
-                  </div>
-                  <div className="text-xs text-muted-foreground">20.0 overs • Target: 181</div>
-                </div>
-                <div className="text-center">
-                  <Badge className="live-indicator">England wins by 15 runs</Badge>
-                </div>
-              </div>
-            </Card>
-
-            {/* Stream Quality */}
-            <Card className="p-6">
-              <h3 className="text-lg font-semibold mb-4">Stream Quality</h3>
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">Resolution</span>
-                  <Badge variant="outline">1080p HD</Badge>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">Latency</span>
-                  <Badge variant="outline">≤2s</Badge>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-sm">Buffer Health</span>
-                  <Badge className="cricket-gradient">Excellent</Badge>
-                </div>
+                <h3 className="text-xl font-semibold">Join Our Cricket Community</h3>
+                <p className="text-muted-foreground">Get live updates, highlights, and exclusive content</p>
+                <Button 
+                  className="bg-[#0088cc] hover:bg-[#0077bb] text-white px-8 py-3"
+                  onClick={() => window.open('https://t.me/+JtamklRCRxAxMTg1', '_blank')}
+                >
+                  <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0C5.374 0 0 5.373 0 12s5.374 12 12 12 12-5.373 12-12S18.626 0 12 0zm5.568 8.16l-1.61 7.548c-.12.529-.437.661-.886.41l-2.453-1.81-1.184 1.14c-.131.131-.241.241-.494.241l.176-2.497 4.552-4.115c.197-.176-.043-.275-.306-.099L9.28 13.308 6.87 12.48c-.529-.165-.539-.529.11-.781l10.426-4.02c.44-.165.826.099.684.781-.002 0-.002 0-.002 0z"/>
+                  </svg>
+                  Join Telegram Channel
+                </Button>
               </div>
             </Card>
           </div>
