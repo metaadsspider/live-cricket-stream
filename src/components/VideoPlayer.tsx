@@ -29,26 +29,8 @@ export const VideoPlayer = ({ src, poster, className }: VideoPlayerProps) => {
 
     if (Hls.isSupported()) {
       const hls = new Hls({
-        // Ultra-low latency configuration
-        lowLatencyMode: true,
-        backBufferLength: 90,
-        maxBufferLength: 30,
-        maxMaxBufferLength: 600,
-        maxBufferSize: 60 * 1000 * 1000,
-        maxBufferHole: 0.5,
-        liveSyncDurationCount: 1,
-        liveMaxLatencyDurationCount: 3,
         enableWorker: true,
         startLevel: -1,
-        // Basic buffering settings
-        progressive: true,
-        nudgeOffset: 0.1,
-        nudgeMaxRetry: 3,
-        maxLoadingDelay: 4,
-        // Optimize for live streaming
-        capLevelToPlayerSize: false,
-        startFragPrefetch: true,
-        testBandwidth: false
       });
 
       hls.loadSource(src);
@@ -57,10 +39,7 @@ export const VideoPlayer = ({ src, poster, className }: VideoPlayerProps) => {
 
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
         console.log('HLS manifest loaded');
-        // Auto-play the stream
-        if (video) {
-          video.play().catch(e => console.log('Auto-play prevented:', e));
-        }
+        video.play().catch(e => console.log('Auto-play prevented:', e));
       });
 
       hls.on(Hls.Events.ERROR, (event, data) => {
@@ -78,7 +57,6 @@ export const VideoPlayer = ({ src, poster, className }: VideoPlayerProps) => {
             default:
               console.log('Fatal error, destroying HLS...');
               hls.destroy();
-              // Try to reload after a delay
               setTimeout(() => {
                 const newHls = new Hls(hls.config);
                 newHls.loadSource(src);
@@ -94,9 +72,7 @@ export const VideoPlayer = ({ src, poster, className }: VideoPlayerProps) => {
     }
 
     return () => {
-      if (hlsRef.current) {
-        hlsRef.current.destroy();
-      }
+      hlsRef.current?.destroy();
     };
   }, [src]);
 
@@ -127,12 +103,8 @@ export const VideoPlayer = ({ src, poster, className }: VideoPlayerProps) => {
       if (isPlaying) {
         videoRef.current.pause();
       } else {
-        videoRef.current.play().catch(e => {
-          console.log('Play failed:', e);
-          // Retry once
-          setTimeout(() => {
-            videoRef.current?.play();
-          }, 500);
+        videoRef.current.play().catch(() => {
+          setTimeout(() => videoRef.current?.play(), 500);
         });
       }
     }
@@ -196,7 +168,6 @@ export const VideoPlayer = ({ src, poster, className }: VideoPlayerProps) => {
         muted={isMuted}
       />
       
-      {/* Live indicator */}
       {isLive && (
         <div className="absolute top-4 left-4 live-indicator">
           <div className="w-2 h-2 bg-current rounded-full animate-pulse" />
@@ -204,14 +175,12 @@ export const VideoPlayer = ({ src, poster, className }: VideoPlayerProps) => {
         </div>
       )}
 
-      {/* Controls overlay */}
       <div
         className={cn(
           "absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/40 smooth-transition",
           showControls ? "opacity-100" : "opacity-0"
         )}
       >
-        {/* Play/Pause button - center */}
         <div className="absolute inset-0 flex items-center justify-center">
           <Button
             variant="ghost"
@@ -227,9 +196,7 @@ export const VideoPlayer = ({ src, poster, className }: VideoPlayerProps) => {
           </Button>
         </div>
 
-        {/* Bottom controls */}
         <div className="absolute bottom-0 left-0 right-0 p-4 space-y-3">
-          {/* Progress bar - only for non-live content */}
           {!isLive && duration > 0 && (
             <div className="space-y-1">
               <Slider
@@ -250,7 +217,6 @@ export const VideoPlayer = ({ src, poster, className }: VideoPlayerProps) => {
             </div>
           )}
 
-          {/* Control buttons */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Button
