@@ -15,16 +15,12 @@ const Index = () => {
     team1: {
       name: "England",
       shortName: "ENG", 
-      flag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
-      score: "180/5",
-      overs: "(18.3 ov)"
+      flag: "🏴󠁧󠁢󠁥󠁮󠁧󠁿"
     },
     team2: {
       name: "South Africa", 
       shortName: "SA",
-      flag: "🇿🇦",
-      score: "165/8",
-      overs: "(20.0 ov)"
+      flag: "🇿🇦"
     },
     matchType: "3rd T20 International",
     venue: "The Oval, London",
@@ -47,7 +43,7 @@ const Index = () => {
     }, 100);
   };
 
-  const streamUrl = "https://dai.google.com/linear/hls/event/eerPuh7PQM-0T7qEJ9TwHQ/master.m3u8";
+  const streamUrl = "https://lb3.strmd.top/secure/kupVaYWkLqDmAipVUvFPPOOBOZkYPSiS/echo/stream/england-vs-south-africa-third-t20-cricket-1/1/playlist.m3u8";
 
   return (
     <div className="min-h-screen bg-background">
@@ -79,6 +75,7 @@ const Index = () => {
               <div className="space-y-4">
                 <VideoPlayer
                   src={streamUrl}
+                  poster="/match-thumbnail.jpg"
                   className="aspect-video rounded-xl overflow-hidden"
                 />
                 <div className="flex items-center justify-between">

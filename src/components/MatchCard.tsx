@@ -71,12 +71,6 @@ export const MatchCard = ({
                 <p className="text-sm text-muted-foreground">{team1.shortName}</p>
               </div>
             </div>
-            {team1.score && (
-              <div className="text-right">
-                <p className="font-semibold text-lg">{team1.score}</p>
-                <p className="text-sm text-muted-foreground">{team1.overs}</p>
-              </div>
-            )}
           </div>
 
           <div className="flex items-center justify-center">
@@ -94,12 +88,6 @@ export const MatchCard = ({
                 <p className="text-sm text-muted-foreground">{team2.shortName}</p>
               </div>
             </div>
-            {team2.score && (
-              <div className="text-right">
-                <p className="font-semibold text-lg">{team2.score}</p>
-                <p className="text-sm text-muted-foreground">{team2.overs}</p>
-              </div>
-            )}
           </div>
         </div>
 
