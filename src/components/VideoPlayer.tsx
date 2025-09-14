@@ -29,16 +29,26 @@ export const VideoPlayer = ({ src, poster, className }: VideoPlayerProps) => {
 
     if (Hls.isSupported()) {
       const hls = new Hls({
+        // Ultra-low latency configuration
         lowLatencyMode: true,
-        backBufferLength: 30,
+        backBufferLength: 90,
         maxBufferLength: 30,
-        maxMaxBufferLength: 60,
+        maxMaxBufferLength: 600,
         maxBufferSize: 60 * 1000 * 1000,
-        maxBufferHole: 0.1,
-        liveSyncDurationCount: 3,
-        liveMaxLatencyDurationCount: 10,
+        maxBufferHole: 0.5,
+        liveSyncDurationCount: 1,
+        liveMaxLatencyDurationCount: 3,
         enableWorker: true,
         startLevel: -1,
+        // Basic buffering settings
+        progressive: true,
+        nudgeOffset: 0.1,
+        nudgeMaxRetry: 3,
+        maxLoadingDelay: 4,
+        // Optimize for live streaming
+        capLevelToPlayerSize: false,
+        startFragPrefetch: true,
+        testBandwidth: false
       });
 
       hls.loadSource(src);
@@ -47,6 +57,10 @@ export const VideoPlayer = ({ src, poster, className }: VideoPlayerProps) => {
 
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
         console.log('HLS manifest loaded');
+        // Auto-play the stream
+        if (video) {
+          video.play().catch(e => console.log('Auto-play prevented:', e));
+        }
       });
 
       hls.on(Hls.Events.ERROR, (event, data) => {
@@ -54,13 +68,23 @@ export const VideoPlayer = ({ src, poster, className }: VideoPlayerProps) => {
         if (data.fatal) {
           switch (data.type) {
             case Hls.ErrorTypes.NETWORK_ERROR:
-              hls.startLoad();
+              console.log('Retrying network error...');
+              setTimeout(() => hls.startLoad(), 1000);
               break;
             case Hls.ErrorTypes.MEDIA_ERROR:
+              console.log('Recovering media error...');
               hls.recoverMediaError();
               break;
             default:
+              console.log('Fatal error, destroying HLS...');
               hls.destroy();
+              // Try to reload after a delay
+              setTimeout(() => {
+                const newHls = new Hls(hls.config);
+                newHls.loadSource(src);
+                newHls.attachMedia(video);
+                hlsRef.current = newHls;
+              }, 3000);
               break;
           }
         }
@@ -103,7 +127,13 @@ export const VideoPlayer = ({ src, poster, className }: VideoPlayerProps) => {
       if (isPlaying) {
         videoRef.current.pause();
       } else {
-        videoRef.current.play();
+        videoRef.current.play().catch(e => {
+          console.log('Play failed:', e);
+          // Retry once
+          setTimeout(() => {
+            videoRef.current?.play();
+          }, 500);
+        });
       }
     }
   };

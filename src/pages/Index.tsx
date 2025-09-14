@@ -36,8 +36,15 @@ const Index = () => {
   const handleWatchLive = () => {
     setIsWatching(true);
     toast.success("Starting live stream...", {
-      description: "Connecting to low-latency stream"
+      description: "Connecting to ultra-low latency stream"
     });
+    // Auto-scroll to video player after a brief moment
+    setTimeout(() => {
+      const videoElement = document.querySelector('.video-container');
+      if (videoElement) {
+        videoElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
   };
 
   const streamUrl = "https://lb3.strmd.top/secure/kupVaYWkLqDmAipVUvFPPOOBOZkYPSiS/echo/stream/england-vs-south-africa-third-t20-cricket-1/1/playlist.m3u8";
@@ -96,24 +103,6 @@ const Index = () => {
               />
             )}
 
-            {/* Match Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Card className="p-4 text-center hover-lift">
-                <TrendingUp className="h-8 w-8 mx-auto mb-2 text-primary" />
-                <h3 className="font-semibold">Live Score</h3>
-                <p className="text-sm text-muted-foreground">Real-time updates</p>
-              </Card>
-              <Card className="p-4 text-center hover-lift">
-                <Clock className="h-8 w-8 mx-auto mb-2 text-primary" />
-                <h3 className="font-semibold">Zero Delay</h3>
-                <p className="text-sm text-muted-foreground">Ultra-low latency</p>
-              </Card>
-              <Card className="p-4 text-center hover-lift">
-                <Trophy className="h-8 w-8 mx-auto mb-2 text-primary" />
-                <h3 className="font-semibold">HD Quality</h3>
-                <p className="text-sm text-muted-foreground">Crystal clear stream</p>
-              </Card>
-            </div>
           </div>
 
           {/* Sidebar */}
